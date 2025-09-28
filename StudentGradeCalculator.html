@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grade Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #333;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px;
+            width: 200px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Student Grade Calculator</h1>
+
+    <label>Number of Subjects:</label>
+    <input type="number" id="numSubjects" min="1" placeholder="Enter number of subjects"><br>
+    <button onclick="generateInputs()">Submit</button>
+
+    <div id="marksInputs"></div>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function generateInputs() {
+            const numSubjects = document.getElementById("numSubjects").value;
+            const container = document.getElementById("marksInputs");
+            container.innerHTML = ""; // Clear previous inputs
+            document.getElementById("result").innerHTML = "";
+
+            if (numSubjects > 0) {
+                for (let i = 1; i <= numSubjects; i++) {
+                    const input = document.createElement("input");
+                    input.type = "number";
+                    input.id = "subject" + i;
+                    input.placeholder = "Marks for subject " + i;
+                    input.min = 0;
+                    input.max = 100;
+                    container.appendChild(input);
+                    container.appendChild(document.createElement("br"));
+                }
+
+                const button = document.createElement("button");
+                button.textContent = "Calculate Grade";
+                button.onclick = calculateGrade;
+                container.appendChild(button);
+            }
+        }
+
+        function calculateGrade() {
+            const numSubjects = document.getElementById("numSubjects").value;
+            let total = 0;
+
+            for (let i = 1; i <= numSubjects; i++) {
+                const marks = parseFloat(document.getElementById("subject" + i).value);
+                if (isNaN(marks) || marks < 0 || marks > 100) {
+                    alert("Please enter valid marks between 0 and 100 for all subjects.");
+                    return;
+                }
+                total += marks;
+            }
+
+            const average = total / numSubjects;
+            let grade = "";
+
+            if (average >= 90) grade = "A";
+            else if (average >= 75) grade = "B";
+            else if (average >= 50) grade = "C";
+            else grade = "F";
+
+            document.getElementById("result").innerHTML =
+                `Total Marks: ${total}<br>Average: ${average.toFixed(2)}<br>Grade: ${grade}`;
+        }
+    </script>
+
+</body>
+</html>
